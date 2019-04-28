@@ -114,5 +114,22 @@ int get_tip_result (int tip_number){
   }
 }
 int get_right_tips_count (int right_digits_count){
-  return 0;
+  if (right_digits_count<0 || right_digits_count>TIP_SIZE || tip[0]==0) {
+      return -1;
+    }
+    int count=0;
+    fseek(fd, 0 , SEEK_SET);
+    char line[MAX_LINE_LEN];
+
+    for (int i = 0; i < 1000000; i++) {
+      if(fgets(line, MAX_LINE_LEN, fd)==0)
+      {
+        return count;
+      }
+      if(get_tip_result(i)==right_digits_count)
+      {
+        count++;
+      }
+    }
+  return count;
 }
