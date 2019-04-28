@@ -37,7 +37,16 @@ int search_start(char* line){
   }
   return -1;
 }
-bool 	init_lottery (const char *csv_file, char csv_separator){
+bool is_in_drawings(int tips){
+  for (int i = 0; i < TIP_SIZE; i++) {
+    if(tips==tip[i])
+    {
+      return true;
+    }
+  }
+  return false;
+}
+bool init_lottery (const char *csv_file, char csv_separator){
   fd=fopen(csv_file,"r");
   separator=csv_separator;
 
@@ -46,7 +55,7 @@ bool 	init_lottery (const char *csv_file, char csv_separator){
   }
   return fd!=0;
 }
-bool 	get_tip (int tip_number, int tip[TIP_SIZE]){
+bool get_tip (int tip_number, int tip[TIP_SIZE]){
   char line[MAX_LINE_LEN];
   fseek(fd, 0 , SEEK_SET);
   if(tip_number<0){
@@ -76,12 +85,34 @@ bool 	get_tip (int tip_number, int tip[TIP_SIZE]){
   }
   return true;
 }
-bool 	set_drawing (int drawing_numbers[TIP_SIZE]){
+bool set_drawing (int drawing_numbers[TIP_SIZE]){
+  for (int i = 0; i < TIP_SIZE; i++) {
+    if(drawing_numbers[i]<1 || drawing_numbers[i] > 45){
+      return false;
+    }
+    tip[i]=drawing_numbers[i];
+  }
   return true;
 }
-int 	get_tip_result (int tip_number){
-  return 0;
+int get_tip_result (int tip_number){
+  if(tip[0]==0){
+    return -1;
+  }
+
+  int tips[TIP_SIZE];
+
+  if(!get_tip(tip_number,tips)){
+    return -2;
+  }
+
+  int count=0;
+
+  for (int i = 0; i < TIP_SIZE; i++) {
+    if(is_in_drawings(tips[i])){
+      count++;
+    }
+  }
 }
-int 	get_right_tips_count (int right_digits_count){
+int get_right_tips_count (int right_digits_count){
   return 0;
 }
